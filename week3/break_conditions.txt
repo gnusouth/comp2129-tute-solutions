@@ -1,0 +1,11 @@
+There are 2 ways to break the "break_me" program.
+
+Case 1:
+	x >= y and x > z
+
+	Will result in a NULL dereference inside the x > z branch.
+
+Case 2:
+	x >= y and x == z
+
+	Will result in a NULL dereference when printing.
