@@ -1,0 +1,4 @@
+# Ignore intermediate files
+*.o
+*.s
+*.i
