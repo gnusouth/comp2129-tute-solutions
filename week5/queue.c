@@ -1,14 +1,14 @@
 #include <stdlib.h>
 #include "queue.h"
 
-Queue queue_create(void)
+struct Queue * queue_create(void)
 {
-	Queue q = malloc(sizeof(struct Queue));
+	struct Queue * q = malloc(sizeof(struct Queue));
 	*q = (struct Queue) {.front = NULL, .back = NULL};
 	return q;
 }
 
-void queue_delete(Queue q)
+void queue_delete(struct Queue * q)
 {
 	struct Node * current = q->front;
 	while (current != NULL)
@@ -20,12 +20,12 @@ void queue_delete(Queue q)
 	free(q);
 }
 
-int queue_isempty(Queue q)
+int queue_isempty(struct Queue * q)
 {
 	return (q->front == NULL);
 }
 
-void queue_push(Queue q, int data)
+void queue_push(struct Queue * q, int data)
 {
 	struct Node * n = malloc(sizeof(struct Node));
 	*n = (struct Node) {.data = data, .next = q->back, .prev = NULL};
@@ -43,7 +43,7 @@ void queue_push(Queue q, int data)
 	q->back = n;
 }
 
-int queue_pop(Queue q)
+int queue_pop(struct Queue * q)
 {
 	// Get the front of the queue
 	struct Node * n = q->front;

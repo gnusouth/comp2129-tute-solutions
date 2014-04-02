@@ -3,7 +3,7 @@
 
 int main()
 {
-	Queue q = queue_create();
+	struct Queue * q = queue_create();
 
 	queue_push(q, 2);
 	queue_push(q, 0);
