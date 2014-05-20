@@ -12,7 +12,7 @@ typedef struct {
 	unsigned int answer;
 
 	#ifdef PADDING
-    // Padding to fill a 64-byte cache line
+	// Padding to fill a 64-byte cache line
 	char padding[PADDING_SIZE];
 	#endif
 } WorkerArgs;
@@ -27,26 +27,26 @@ void *worker(void *arg)
 	printf("Thread working on args at %p\n", work);
 
 	#ifdef LOCAL
-    // Temporary local variable (to avoid false sharing)
+	// Temporary local variable (to avoid false sharing)
 	unsigned int answer = 0;
 	#else
-    // Set the answer to zero if we're modifying the struct directly (-DPADDING, or no args)
+	// Set the answer to zero if we're modifying the struct directly (-DPADDING, or no args)
 	work->answer = 0;
 	#endif
 
 	for (int i = 0; i < ITERATIONS / nthreads; i++)
 	{
 		#ifdef LOCAL
-        // Update the temporary local variable if compiled with -DLOCAL
+		// Update the temporary local variable if compiled with -DLOCAL
 		answer += rand_r(&work->seed);
 		#else
-        // Otherwise, update the struct variable (source of false sharing if no padding is used).
+		// Otherwise, update the struct variable (source of false sharing if no padding is used).
 		work->answer += rand_r(&work->seed);
 		#endif
 	}
 
 	#ifdef LOCAL
-    // If using the local variable approach, write the local variable's value back to the struct.
+	// If using the local variable approach, write the local variable's value back to the struct.
 	work->answer = answer;
 	#endif
 
@@ -64,13 +64,13 @@ int main(int argc, char *argv[])
 
 	pthread_t threads[nthreads];
 
-    /* The false sharing occurs here. These structs are allocated one after another on the stack,
-     * and will be loaded into the same cache line by default (they're only 8 bytes each).
-     * If you compile with -DPADDING, 56 bytes of padding will be inserted at the end of each struct
-     * so that each one occupies an entire cache line. The other alternative is to avoid modifying the
-     * struct variable from within the thread function by using a temporary local variable.
-     * To get this behaviour, compile the program with -DLOCAL
-     */
+	/* The false sharing occurs here. These structs are allocated one after another on the stack,
+	 * and will be loaded into the same cache line by default (they're only 8 bytes each).
+	 * If you compile with -DPADDING, 56 bytes of padding will be inserted at the end of each struct
+	 * so that each one occupies an entire cache line. The other alternative is to avoid modifying the
+	 * struct variable from within the thread function by using a temporary local variable.
+	 * To get this behaviour, compile the program with -DLOCAL
+	 */
 	WorkerArgs work[nthreads];
 
 	for (int i = 0; i < nthreads; i++)
