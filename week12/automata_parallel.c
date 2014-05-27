@@ -113,7 +113,14 @@ int main(void)
 	{
 		// Print the current generation.
 		// printf("Generation %02d: ", i);
-		print_board(board1, width);
+		if (i % 2 == 0)
+		{
+			print_board(board1, width);
+		}
+		else
+		{
+			print_board(board2, width);
+		}
 
 		// Signal that the current generation has been printed
 		pthread_barrier_wait(&barrier_1);
