@@ -2,7 +2,7 @@ CC = clang
 CFLAGS = -W -Wall -std=gnu11 -pedantic
 LDFLAGS = -lpthread
 
-EXECUTABLES = philosophers falseshare
+EXECUTABLES = philosophers falseshare robots
 
 default: $(EXECUTABLES)
 
